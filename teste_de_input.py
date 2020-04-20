@@ -18,7 +18,7 @@ while tentativas != 0:
 # Menu inicial
 import pandas as pd 
 import os
-df_module = pd.DataFrame(data=['Arquivos .txt','Arquivos Excel','Arquivos em PDF'],columns=['Module'])
+df_module = pd.DataFrame(data=['Arquivos .txt','Arquivos Excel','Scrapping Word'],columns=['Module'])
 df_module.index = df_module.index +1
 
 def initialization():
@@ -30,7 +30,7 @@ def initialization():
     elif module =='2':
         return module_excel()
     elif module == '3':
-        return module_pdf()
+        return Scrapping_word()
     else:
         print("MÓDULO INEXISTENTE")
         return initialization()
@@ -46,10 +46,10 @@ def module_txt():
 def module_excel():
     print("Módulo excel selecionado")
 # Módulo PDF
-def module_pdf():
-    print("Módulo PDF selecionado")
-    import module_PDF as PDF
-    PDF.module_init()
+def Scrapping_word():
+    print("Módulo Scrapping Word selecionado")
+    import module_word as word
+    word.initialization()
 # Escolhendo o módulo
 print("Bem-vindo ao primeiro protótipo de interação entre homem e máquina\nSelecione o módulo que deseja")
 initialization()
