@@ -1,12 +1,14 @@
+# Bibliotecas
 import docx
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
-# a.tables[0].cell(l[0][0],l[0][1]).text  (esse é o segredo)
+# a.tables[0].cell(l[0][0],l[0][1]).text  (esse é o segredo para encontrar a informação dentro da tabela docx)
 
  
 # Funções
 
+# Menu inicial
 def initialization():
     try:
         doc = input("Coloque aqui o caminho do arquivo .DOC: ")
@@ -18,6 +20,7 @@ def initialization():
         print("Documento não encotrado\n")
         return initialization()
 
+# Escolha das funções e determinação de intervalo de scrapping
 def choose_function():
     global i, lim , dif, scr, error
     error =0
@@ -71,26 +74,8 @@ def choose_function():
             while r!= 'y'or r !='n':
                 r = input("\nDeseja realizar scrapping? [y/n]")
                 if r == 'y':
-                    try:
-                        j=0
-                        a.tables[i]
-                        array = np.empty((len(a.tables[i].rows),len(a.tables[i].columns)))    
-                        l=[]
-                        it = np.nditer(array, flags=['multi_index'])
-                        while not it.finished:
-                            l.append(it.multi_index)
-                            it.iternext()
-                            array = array.astype('object')
-                        while j < len(l):
-                            array[l[j][0],l[j][1]] = a.tables[i].cell(l[j][0],l[j][1]).text       
-                            j+=1
-                        df = pd.DataFrame(data=array[1:],columns=array[0,:])
-                        df.to_excel('C:/Users/ADM/Desktop/Temporários/Output_Word_module/tabelas.xlsx',sheet_name='Tabela selecionada')
-                        results()
-                                                                   
-                    except PermissionError:
-                        input("\nPermission Error:\nVerifique se o arquivo EXCEL está aberto, favor fechá-lo para prosseguir")
-                        return choose_function()                       
+                    scrapping_table()
+                    break                                           
                 elif r == 'n':
                     print("Ok doutor")
                     return choose_function() 
@@ -109,7 +94,30 @@ def choose_function():
             else:
                 print("\nComando inválido")
 
-''' Núcleo do código '''
+# Scrapping de 1 tabela
+def scrapping_table():
+    try:
+        j=0
+        a.tables[i]
+        array = np.empty((len(a.tables[i].rows),len(a.tables[i].columns)))    
+        l=[]
+        it = np.nditer(array, flags=['multi_index'])
+        while not it.finished:
+            l.append(it.multi_index)
+            it.iternext()
+            array = array.astype('object')
+        while j < len(l):
+            array[l[j][0],l[j][1]] = a.tables[i].cell(l[j][0],l[j][1]).text       
+            j+=1
+        df = pd.DataFrame(data=array[1:],columns=array[0,:])
+        df.to_excel('C:/Users/ADM/Desktop/Temporários/Output_Word_module/tabelas.xlsx',sheet_name='Tabela selecionada')
+        results()
+                                                    
+    except PermissionError:
+        input("\nPermission Error:\nVerifique se o arquivo EXCEL está aberto, favor fechá-lo para prosseguir")
+        return choose_function()
+
+# Scrapping de várias tabelas
 def scrapping_tables():
         global i, error
         try:
@@ -144,6 +152,8 @@ def scrapping_tables():
             error+=1
             print("Tabela "+ str(i) +" falhou" )
             return scrapping_tables()
+
+# Resultado de Scrappings
 def results():
     if scr != '2':
         print("\n"+str(dif-error)+ " tabelas foram convertidas com sucesso")

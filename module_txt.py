@@ -1,10 +1,12 @@
+# Bibliotecas
 import os
 import pandas as pd 
 import re
 import numpy as np 
 
+# Informando o arquivo txt
 def module_init():
-    os.chdir("C:/Users/ADM/Desktop/Temporários/Rats")
+    os.chdir("C:/Users/ADM/Desktop/Temporários/Rats") # rats significa a pasta aonde estão os arquivos a serem analizados
     print("Seu diretório atual é: C:/Users/ADM/Desktop/Temporários/Rats" )
     r =input("Deseja mudar de diretório? [y/n]")
     try:
@@ -21,10 +23,12 @@ def module_init():
     except KeyboardInterrupt:
         r =input("Deseja voltar ao menu inicial? [y/n]")
         if r == 'y':
-            import teste_de_input
-            teste_de_input.initialization()
+            import Start
+            Start.initialization()
         else:
             return module_init()
+
+# Função para trocar o diretório
 def select_directory():
     try:
         global directory
@@ -35,10 +39,12 @@ def select_directory():
     except KeyboardInterrupt:
         r =input("Deseja voltar ao menu inicial? [y/n]")
         if r == 'y':
-            import teste_de_input
-            teste_de_input.initialization()
+            import Start
+            Start.initialization()
         else:
             return select_directory()
+
+# Função que lista os arquivos do diretório com indice
 def list_directorys():
     try:
         arquivos = os.listdir(directory)
@@ -49,10 +55,12 @@ def list_directorys():
     except KeyboardInterrupt:
         r =input("Deseja voltar ao menu inicial? [y/n]")
         if r == 'y':
-            import teste_de_input
-            teste_de_input.initialization()
+            import Start
+            Start.initialization()
         else:
             return list_directorys()
+
+# Carrega o arquivo txt
 def File():
     try:
         File = df_files.iloc[int(input("Insira o índice do arquivo:"))].to_string()
@@ -66,11 +74,10 @@ def File():
     except KeyboardInterrupt:
         r =input("Deseja voltar ao menu inicial? [y/n]")
         if r == 'y':
-            import teste_de_input
-            teste_de_input.initialization()
+            import Start
+            Start.initialization()
         else:
             return open_txt()
-
 def open_txt():
     text_file = open(directory +"\\"+File_split, encoding="UTF-8")
     print("Arquivo '"+ str(File_split)+"' carregado com sucesso")
@@ -83,6 +90,7 @@ def open_txt():
 
     return menu_functions()
 
+# Escolha de função a ser implementada no arquivo selecionado
 def menu_functions():
     df_menu = pd.DataFrame(data=['Procurar telefones','Procurar emails'],columns=['Funções'])
     df_menu.index = df_menu.index +1
@@ -96,6 +104,7 @@ def menu_functions():
         print("Comando inválido")
         return menu_functions()
 
+# Busca telefone por REGEX
 def func_telefones():
     telefones = re.findall(r'[\b(][0-9]{2}[)] ?9?\d{4}\D?\d{4}\b|\b[0-9]{2} ?9?\d{4}\D?\d{4}\b|\b9?\d{4}\D?\d{4}\b',text)
     linha = []
@@ -141,7 +150,8 @@ def func_telefones():
             return menu_functions()
         else:
             print("Comando inválido")
-    
+
+# Busca e-mails por REGEX   
 def func_emails():
     emails = re.findall(r'\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+\.com\.?b?r?\b',text)
     linha = []
