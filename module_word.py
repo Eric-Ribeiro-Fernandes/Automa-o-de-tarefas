@@ -3,22 +3,67 @@ import docx
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+import os
+import Start
 # a.tables[0].cell(l[0][0],l[0][1]).text  (esse é o segredo para encontrar a informação dentro da tabela docx)
 
  
 # Funções
 
 # Menu inicial
-def initialization():
+def module_init():
+    os.chdir("C:/Users/ADM/Desktop/Temporários/Rats") # rats significa a pasta aonde estão os arquivos a serem analizados
+    print("Seu diretório atual é: C:/Users/ADM/Desktop/Temporários/Rats" )
+    r =input("\nDeseja mudar de diretório? [y/n]")
     try:
-        doc = input("Coloque aqui o caminho do arquivo .DOC: ")
-        global a
-        a =docx.Document(doc)
-        print("\nForam encontradas "+str(len(a.tables))+ " tabelas no documento\n")
-        choose_function()
+        if r =='y':
+            return select_directory()
+        elif r =='n':
+            global directory
+            directory = str(os.getcwd())
+            return list_directorys()
+        else:
+            print("Comando inválido")
+            return module_init()
+    except KeyboardInterrupt:
+        r =input("Deseja voltar ao menu inicial? [y/n]")
+        if r == 'y':
+            import Start
+            Start.initialization() 
+        else:
+            return module_init()
+
+def select_directory():
+    global directory
+    directory = input("Informe o diretório em que o arquivo se encontra:")
+    os.chdir(directory)
+    print("Done")
+    list_directorys()
+
+
+def list_directorys():
+    arquivos = os.listdir(directory)
+    global df_files
+    df_files = pd.DataFrame(arquivos, columns=['Arquivos'])
+    print(df_files)
+    return File()
+
+def File():
+    try:
+        File = df_files.iloc[int(input("\nInsira o índice do arquivo:"))].to_string()
+        global doc
+        doc = File.rsplit("Arquivos    ")[1]
+        if doc[-5:] == '.docx':
+            global a
+            a =docx.Document(doc)
+            print("\nForam encontradas "+str(len(a.tables))+ " tabelas no documento\n")
+            choose_function()
+        else:
+            print("\nO arquivo deve ser de extensão .docx\n")
+            return list_directorys()
     except NameError:
         print("Documento não encotrado\n")
-        return initialization()
+        return File()
 
 # Escolha das funções e determinação de intervalo de scrapping
 def choose_function():
@@ -34,7 +79,7 @@ def choose_function():
             dif = lim - i
             r=""
             while r!= 'y'or r !='n':
-                r = input("\nDeseja realizar scrapping? [y/n]")
+                r = input("\nComeçar scrapping? [y/n]")
                 if r == 'y':
                     scrapping_tables()
                     break
@@ -58,7 +103,7 @@ def choose_function():
             dif = lim - i
             r=""
             while r!= 'y'or r !='n':
-                r = input("\nDeseja realizar scrapping? [y/n]")
+                r = input("\nComeçar scrapping? [y/n]")
                 if r == 'y':
                     scrapping_tables()
                     break
@@ -72,7 +117,7 @@ def choose_function():
             i = int(input("Informe o número da tabela: "))
             r=""
             while r!= 'y'or r !='n':
-                r = input("\nDeseja realizar scrapping? [y/n]")
+                r = input("\nComeçar scrapping? [y/n]")
                 if r == 'y':
                     scrapping_table()
                     break                                           
@@ -90,7 +135,7 @@ def choose_function():
             if r == 'f':
                 choose_function()
             elif r =='i':
-                initialization()
+                File()
             else:
                 print("\nComando inválido")
 
@@ -163,16 +208,16 @@ def results():
     while r != 'y' or r != 'n':
         r = input("\nDeseja fazer scrapping em outro documento? [y/n]")
         if r == 'y':
-            initialization()
+            File()
         elif r == 'n':
             print("Até mais campeão!")
-            exit()
+            Start.initialization()
         else:
             print("Comando inválido")
 
 # Execução
 
 df_scrapping = pd.DataFrame(data=['Todas as tabelas','Intervalo de tabelas','Tabela específica'],columns=['Tipos de scrapping'])
-initialization()
+module_init()
 
 

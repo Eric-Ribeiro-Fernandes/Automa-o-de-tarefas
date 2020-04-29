@@ -8,9 +8,8 @@ import numpy as np
 def module_init():
     os.chdir("C:/Users/ADM/Desktop/Temporários/Rats") # rats significa a pasta aonde estão os arquivos a serem analizados
     print("Seu diretório atual é: C:/Users/ADM/Desktop/Temporários/Rats" )
-    r =input("Deseja mudar de diretório? [y/n]")
+    r =input("\nDeseja mudar de diretório? [y/n]")
     try:
-        
         if r =='y':
             return select_directory()
         elif r =='n':
@@ -30,57 +29,41 @@ def module_init():
 
 # Função para trocar o diretório
 def select_directory():
-    try:
-        global directory
-        directory = input("Informe o diretório em que o arquivo se encontra:")
-        os.chdir(directory)
-        print("Done")
-        list_directorys()
-    except KeyboardInterrupt:
-        r =input("Deseja voltar ao menu inicial? [y/n]")
-        if r == 'y':
-            import Start
-            Start.initialization()
-        else:
-            return select_directory()
+    global directory
+    directory = input("Informe o diretório em que o arquivo se encontra:")
+    os.chdir(directory)
+    print("Done")
+    list_directorys()
 
 # Função que lista os arquivos do diretório com indice
 def list_directorys():
-    try:
-        arquivos = os.listdir(directory)
-        global df_files
-        df_files = pd.DataFrame(arquivos, columns=['Arquivos'])
-        print(df_files)
-        File()
-    except KeyboardInterrupt:
-        r =input("Deseja voltar ao menu inicial? [y/n]")
-        if r == 'y':
-            import Start
-            Start.initialization()
-        else:
-            return list_directorys()
+    arquivos = os.listdir(directory)
+    global df_files
+    df_files = pd.DataFrame(arquivos, columns=['Arquivos'])
+    print(df_files)
+    File()
 
 # Carrega o arquivo txt
 def File():
     try:
-        File = df_files.iloc[int(input("Insira o índice do arquivo:"))].to_string()
+        File = df_files.iloc[int(input("\nInsira o índice do arquivo:"))].to_string()
         global File_split
         File_split = File.rsplit("Arquivos    ")[1]
-        open_txt()
-    except ValueError:
-        print("Insira um número inteiro")
-    except IndexError:
-        print("Esse índice não existe")
-    except KeyboardInterrupt:
-        r =input("Deseja voltar ao menu inicial? [y/n]")
-        if r == 'y':
-            import Start
-            Start.initialization()
+        if File_split[-4:] == '.txt':
+            open_txt()
         else:
-            return open_txt()
+            print("\nO arquivo deve ser de extensão .txt\n")
+            return list_directorys()
+    except ValueError:
+        print("\nInsira um número inteiro")
+        return list_directorys()
+    except IndexError:
+        print("\nEsse índice não existe")
+        return list_directorys()
+   
 def open_txt():
     text_file = open(directory +"\\"+File_split, encoding="UTF-8")
-    print("Arquivo '"+ str(File_split)+"' carregado com sucesso")
+    print("\nArquivo '"+ str(File_split)+"' carregado com sucesso")
     global text 
     text = text_file.read()
     text_file = open(directory +"\\"+File_split, encoding="UTF-8")
@@ -95,7 +78,7 @@ def menu_functions():
     df_menu = pd.DataFrame(data=['Procurar telefones','Procurar emails'],columns=['Funções'])
     df_menu.index = df_menu.index +1
     print(df_menu)
-    r = input("Escolha a função que deseja aplicar ao arquivo: ")
+    r = input("\nEscolha a função que deseja aplicar ao arquivo: ")
     if r == '1':
         return func_telefones()
     elif r =='2':
@@ -136,7 +119,7 @@ def func_telefones():
     s = ""
     while s != 'y' or s != 'n':
         
-        s = input('Deseja salvar Output? [y/n]')
+        s = input('\nDeseja salvar Output? [y/n]')
         
         if s == 'y':
             out_txt = str(df_telefones)
@@ -182,7 +165,7 @@ def func_emails():
 
     s = ""
     while s != 'y' or s != 'n': 
-        s = input('Deseja salvar Output? [y/n]')
+        s = input('\nDeseja salvar Output? [y/n]')
         if s == 'y':
             out_txt = str(df_emails)
             output =open("C:/Users/ADM/Desktop/Temporários/Output_txt_module/Output.txt",'w',encoding='UTF-8')
