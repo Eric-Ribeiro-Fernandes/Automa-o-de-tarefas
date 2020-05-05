@@ -3,7 +3,6 @@ import os
 import pandas as pd 
 import re
 import numpy as np 
-import Start
 # Informando o arquivo txt
 def module_init():
     os.chdir("C:/Users/ADM/Desktop/Temporários/Rats") # rats significa a pasta aonde estão os arquivos a serem analizados

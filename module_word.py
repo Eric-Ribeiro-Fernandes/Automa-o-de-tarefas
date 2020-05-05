@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 import os
-import Start
 # a.tables[0].cell(l[0][0],l[0][1]).text  (esse é o segredo para encontrar a informação dentro da tabela docx)
 
  
@@ -67,66 +66,69 @@ def File():
 
 # Escolha das funções e determinação de intervalo de scrapping
 def choose_function():
+    df_scrapping = pd.DataFrame(data=['Todas as tabelas','Intervalo de tabelas','Tabela específica'],columns=['Tipos de scrapping'])
     global i, lim , dif, scr, error
     error =0
     print(df_scrapping)
-    scr = input("\nSelecione uma opção: ")
+    scr = None
     try:
-        if scr == '0':
-            print("Opção 0 escolhida")
-            i = 0
-            lim = len(a.tables)
-            dif = lim - i
-            r=""
-            while r!= 'y'or r !='n':
-                r = input("\nComeçar scrapping? [y/n]")
-                if r == 'y':
-                    scrapping_tables()
-                    break
-                elif r == 'n':
-                    print("Ok doutor")
-                    return choose_function()            
-                else:
-                    print("Comando inválido")
-        elif scr == '1':
-            print("Opção 1 escolhida")
-            i = int(input("Selecione o limite inferior: "))
-            if i > len(a.tables):
-                raise Exception("Limite definido é maior que o total de tabelas do documento")
-            if i <0:
-                raise Exception("Limmite não pode ser inferior a zero")
-            lim = int(input("Selecione o limite superior: "))
-            if lim < i:
-                raise Exception("O limite superior deve ser maior que o limite inferior")
-            if lim > len(a.tables):
-                raise Exception("Limite definido é maior que o total de tabelas do documento")   
-            dif = lim - i
-            r=""
-            while r!= 'y'or r !='n':
-                r = input("\nComeçar scrapping? [y/n]")
-                if r == 'y':
-                    scrapping_tables()
-                    break
-                elif r == 'n':
-                    print("Ok doutor")
-                    return choose_function()            
-                else:
-                    print("Comando inválido")
-        elif scr == '2':
-            print("Opção 2 escolhida")
-            i = int(input("Informe o número da tabela: "))
-            r=""
-            while r!= 'y'or r !='n':
-                r = input("\nComeçar scrapping? [y/n]")
-                if r == 'y':
-                    scrapping_table()
-                    break                                           
-                elif r == 'n':
-                    print("Ok doutor")
-                    return choose_function() 
-        else:
-            print("\nComando inválido, selecione uma opção do índice da tabela\n")
-            return choose_function()
+        while scr != ('0','1','2'):
+            scr = input("\nSelecione uma opção: ")
+            if scr == '0':
+                print("Opção 0 escolhida")
+                i = 0
+                lim = len(a.tables)
+                dif = lim - i
+                r=""
+                while r!= 'y'or r !='n':
+                    r = input("\nComeçar scrapping? [y/n]")
+                    if r == 'y':
+                        scrapping_tables()
+                        break
+                    elif r == 'n':
+                        print("Ok doutor")
+                        return choose_function()            
+                    else:
+                        print("Comando inválido")
+            elif scr == '1':
+                print("Opção 1 escolhida")
+                i = int(input("Selecione o limite inferior: "))
+                if i > len(a.tables):
+                    raise Exception("Limite definido é maior que o total de tabelas do documento")
+                if i <0:
+                    raise Exception("Limmite não pode ser inferior a zero")
+                lim = int(input("Selecione o limite superior: "))
+                if lim < i:
+                    raise Exception("O limite superior deve ser maior que o limite inferior")
+                if lim > len(a.tables):
+                    raise Exception("Limite definido é maior que o total de tabelas do documento")   
+                dif = lim - i
+                r=""
+                while r!= 'y'or r !='n':
+                    r = input("\nComeçar scrapping? [y/n]")
+                    if r == 'y':
+                        scrapping_tables()
+                        break
+                    elif r == 'n':
+                        print("Ok doutor")
+                        return choose_function()            
+                    else:
+                        print("Comando inválido")
+            elif scr == '2':
+                print("Opção 2 escolhida")
+                i = int(input("Informe o número da tabela: "))
+                r=""
+                while r!= 'y'or r !='n':
+                    r = input("\nComeçar scrapping? [y/n]")
+                    if r == 'y':
+                        scrapping_table()
+                        break                                           
+                    elif r == 'n':
+                        print("Ok doutor")
+                        return choose_function() 
+            else:
+                print("\nComando inválido, selecione uma opção do índice da tabela\n")
+                
 
     except KeyboardInterrupt:
         r =''
@@ -211,13 +213,13 @@ def results():
             File()
         elif r == 'n':
             print("Até mais campeão!")
+            import Start
             Start.initialization()
         else:
             print("Comando inválido")
 
-# Execução
 
-df_scrapping = pd.DataFrame(data=['Todas as tabelas','Intervalo de tabelas','Tabela específica'],columns=['Tipos de scrapping'])
-module_init()
+
+
 
 
