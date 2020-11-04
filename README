@@ -1,6 +1,6 @@
 Projeto criado com a finalidade de praticar a linguagem PYTHON. 
 
-A ideia principal é criar um assintente no prompt de comando do WINDOWS, no qual o usuário informa inputs válidos para navegar nas diversas funções de automação.
+A ideia principal é criar um assistente no prompt de comando do WINDOWS, no qual o usuário informa inputs válidos para navegar nas diversas funções de automação.
 O Foco é automatizar tarefas baseadas em documentos comuns da rotina de trabalho (como documentos WORD, EXCEL, PDF e TXT).
 
 O projeto tem a ambição de compilar as informações mais relevantes do livro "AUTOMATE BORING STUFF WITH PYTHON" em um único assistente, no qual irá compilar todas as funções em uma navegação.
